@@ -6,15 +6,14 @@
 ```mermaid
 
 sequenceDiagram
-    participant Alice
-    participant Bob
-    Alice->>John: Hello John, how are you?
-    loop Healthcheck
-        John->>John: Fight against hypochondria
-    end
-    Note right of John: Rational thoughts <br/>prevail!
-    John-->>Alice: Great!
-    John->>Bob: How about you?
-    Bob-->>John: Jolly good!
+    participant Käyttäjä
+    participant Selain
+    participant Palvelin
+    Käyttäjä->>Selain: Käyttäjä kirjoittaa muistiinpanon lomakkeelle ja painaa Save-painiketta
+    
+    Selain->>Palvelin: HTTP POST, Request URL: https://studies.cs.helsinki.fi/exampleapp/new_note
+    Palvelin->>Selain: 
+
+   
     
 ```

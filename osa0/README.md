@@ -3,8 +3,7 @@
 
 # 0.4: uusi muistiinpano
 
-
-  sequenceDiagram
+sequenceDiagram
     participant browser
     participant server
     

@@ -12,7 +12,7 @@ sequenceDiagram
     Käyttäjä->>Selain: Käyttäjä kirjoittaa muistiinpanon lomakkeelle ja painaa Save-painiketta
     
     Selain->>Palvelin: POST https://studies.cs.helsinki.fi/exampleapp/new_note
-    Note right of browser: Käyttäjän kirjoittamasta muistiinpanosta muodostuu olio ja palvelin lisää sen taulukkoon notes
+    Note right of Palvelin: Käyttäjän kirjoittamasta muistiinpanosta muodostuu olio ja palvelin lisää sen taulukkoon notes
     Palvelin->>Selain: HTTP 302-statuskoodi
     Selain-->Palvelin: GET https://studies.cs.helsinki.fi/exampleapp/notes
     Palvelin->>Selain: Selain lataa uudelleen sivun

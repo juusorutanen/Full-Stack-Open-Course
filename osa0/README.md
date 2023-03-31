@@ -21,7 +21,8 @@ sequenceDiagram
     Selain-->Palvelin: GET https://studies.cs.helsinki.fi/exampleapp/main.js
     Palvelin->>Selain: main.js
     Selain-->Palvelin: GET https://studies.cs.helsinki.fi/exampleapp/data.json
-    Note left of Selain: Ohjelmakoodi main.js-tiedostosta hakee muistiinpanot data.json-tiedostosta ja siirtää ne HTML-tiedostoon, ja selain näyttää muistiinpanot
+    Palvelin->>Selain: data.json
+    Note left of Selain: Ohjelmakoodi main.js-tiedostosta hakee muistiinpanot data.json-tiedostosta ja siirtää ne HTML-tiedostoon, jonka selain näyttää
     
 
 

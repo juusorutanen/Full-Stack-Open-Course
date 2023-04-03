@@ -45,3 +45,18 @@ sequenceDiagram
     Palvelin->>Selain: JSON-tiedoston sisältö
     Note left of Selain: Muistiinpanot renderöidään käyttäjälle näkyväksi tapahtumakäsittelijän (event handler) avulla
 ```
+
+
+# 0.6: Uusi muistiinpano SPA-versiossa
+
+```mermaid
+sequenceDiagram
+    participant Käyttäjä
+    participant Selain
+    participant Palvelin
+    
+    Käyttäjä->>Selain: Käyttäjä kirjoittaa muistiinpanon lomakkeelle ja painaa Save-painiketta
+    Selain->>Palvelin: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    Palvelin->>Selain: Palvelin parsii POST-pyynnön datan ja vastaa statuskoodilla 201
+    Note left of Selain: Uusi muistiinpano näkyy sivuston alhaalla, mutta sivusto ei lataudu uudelleen spa.js-tiedoston metodin e.preventDefault() takia
+```

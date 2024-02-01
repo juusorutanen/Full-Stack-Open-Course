@@ -1,12 +1,66 @@
 import { useState } from "react";
 
+
+const Persons = ({ persons, filterText }) => {
+  const filteredPersons = persons.filter((person) =>
+    person.name.toLowerCase().includes(filterText.toLowerCase())
+  );
+  return (
+    <>
+      {filteredPersons.map((person) => (
+        <p key={person.name}>
+          {person.name} {person.number}
+        </p>
+      ))}
+    </>
+  );
+};
+
+const PersonForm = ({
+  handleNameChange,
+  handleNumberChange,
+  addUser,
+  newName,
+  newNumber,
+}) => {
+  return (
+    <>
+      <form>
+        <h3>Add a new person</h3>
+        <div>
+          name: <input value={newName} onChange={handleNameChange} />
+        </div>
+        <div>
+          phone: <input value={newNumber} onChange={handleNumberChange} />
+        </div>
+        <div>
+          <button type="submit" onClick={addUser}>
+            Add
+          </button>
+        </div>
+      </form>
+    </>
+  );
+};
+
+const Filter = ({ filterText, handleFilterChange }) => {
+  return (
+    <>
+      <div>
+        Filter shown with:
+        <input type="text" value={filterText} onChange={handleFilterChange} />
+      </div>
+    </>
+  );
+};
+
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+    { name: "Arto Hellas", number: "040-123456" },
+    { name: "Ada Lovelace", number: "39-44-5323523" },
+    { name: "Dan Abramov", number: "12-43-234345" },
+    { name: "Mary Poppendieck", number: "39-23-6423122" },
+  ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterText, setFilterText] = useState("");
@@ -25,10 +79,6 @@ const App = () => {
     setFilterText(event.target.value);
   };
 
-  const filteredPersons = persons.filter((person) =>
-    person.name.toLowerCase().includes(filterText.toLowerCase())
-  );
-
   const addUser = (event) => {
     event.preventDefault();
     if (!persons.map((person) => person.name).includes(newName)) {
@@ -46,33 +96,14 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        Filter shown with:
-        <input
-          type="text"
-          value={filterText}
-          onChange={handleFilterChange}
-        />
-      </div>
-      <form>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          phone: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit" onClick={addUser}>
-            add
-          </button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {filteredPersons.map((person) => (
-        <p key={person.name}>
-          {person.name} {person.number}
-        </p>
-      ))}
+      <Filter filterText={filterText} handleFilterChange={handleFilterChange} />
+      <h3>Numbers</h3>
+      <Persons persons={persons} filterText={filterText} />
+      <PersonForm
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        addUser={addUser}
+      />
     </div>
   );
 };

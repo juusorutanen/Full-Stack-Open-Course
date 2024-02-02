@@ -64,8 +64,8 @@ const App = () => {
   const [filterText, setFilterText] = useState("");
 
   useEffect(() => {
-    personService.getAll().then((response) => {
-      setPersons(response.data);
+    personService.getAll().then((data) => {
+      setPersons(data);
     });
   }, []);
 
@@ -85,21 +85,31 @@ const App = () => {
 
   const addUser = (event) => {
     event.preventDefault();
-    if (!persons.map((person) => person.name).includes(newName)) {
+
+    const userExist = persons.find((person) => person.name === newName);
+
+    if(userExist && window.confirm(`${newName} is already added to the phonebook. replace the old number with a new one`)) {
+      const updatedPersons = persons.map((person) =>
+      person.name === newName ? { ...person, number: newNumber } : person
+    );
+
+    personService.update(userExist.id, { ...userExist, number: newNumber })
+      .then((data) => {
+        setPersons(updatedPersons);
+        setNewName("");
+        setNewNumber(""); 
+      })
+    }
+   else if (!userExist) {
       const personObject = {
         name: newName,
         number: newNumber,
       };
-      personService.create(personObject).then((response) => {
-        setPersons(persons.concat(response.data));
+      personService.create(personObject).then((data) => {
+        setPersons(persons.concat(data));
         setNewName("");
       });
-      /* setPersons(persons.concat(personObject));
-      setNewName("");
-    } else {
-      alert(`${newName} is already added to phonebook`);
-    } */
-    }
+    } 
   };
 
   const deletePerson = (id) => {

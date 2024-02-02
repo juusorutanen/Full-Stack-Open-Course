@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import personService from "./services/persons";
 
-
-const Persons = ({ persons, filterText }) => {
+const Persons = ({ persons, filterText, deletePerson }) => {
   const filteredPersons = persons.filter((person) =>
     person.name.toLowerCase().includes(filterText.toLowerCase())
   );
@@ -11,7 +9,10 @@ const Persons = ({ persons, filterText }) => {
     <>
       {filteredPersons.map((person) => (
         <p key={person.name}>
-          {person.name} {person.number}
+          {person.name} {person.number}{" "}
+          <button type="submit" onClick={() => deletePerson(person.id)}>
+            Delete
+          </button>
         </p>
       ))}
     </>
@@ -62,14 +63,11 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filterText, setFilterText] = useState("");
 
-
   useEffect(() => {
-    personService
-      .getAll()
-      .then(response => {
-        setPersons(response.data)
-      })
-  }, [])
+    personService.getAll().then((response) => {
+      setPersons(response.data);
+    });
+  }, []);
 
   const handleNameChange = (event) => {
     console.log(event.target.value);
@@ -92,12 +90,10 @@ const App = () => {
         name: newName,
         number: newNumber,
       };
-      personService
-      .create(personObject)
-      .then(response => {
-        setPersons(persons.concat(response.data))
-        setNewName("")
-      })
+      personService.create(personObject).then((response) => {
+        setPersons(persons.concat(response.data));
+        setNewName("");
+      });
       /* setPersons(persons.concat(personObject));
       setNewName("");
     } else {
@@ -106,12 +102,24 @@ const App = () => {
     }
   };
 
+  const deletePerson = (id) => {
+    const person = persons.find((n) => n.id === id);
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      personService.deleteId(id);
+      setPersons(persons.filter((persons) => persons.id !== id));
+    }
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
       <Filter filterText={filterText} handleFilterChange={handleFilterChange} />
       <h3>Numbers</h3>
-      <Persons persons={persons} filterText={filterText} />
+      <Persons
+        persons={persons}
+        filterText={filterText}
+        deletePerson={deletePerson}
+      />
       <PersonForm
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}

@@ -1,6 +1,24 @@
 import { useState, useEffect } from "react";
 import personService from "./services/persons";
 
+const SuccessNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className="success">{message}</div>
+  )
+}
+
+const ErrorNotication = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className="error">{message}</div>
+  )
+}
+
 const Persons = ({ persons, filterText, deletePerson }) => {
   const filteredPersons = persons.filter((person) =>
     person.name.toLowerCase().includes(filterText.toLowerCase())
@@ -62,6 +80,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterText, setFilterText] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     personService.getAll().then((data) => {
@@ -88,7 +108,7 @@ const App = () => {
 
     const userExist = persons.find((person) => person.name === newName);
 
-    if(userExist && window.confirm(`${newName} is already added to the phonebook. replace the old number with a new one`)) {
+    if(userExist && window.confirm(`${newName.charAt(0).toUpperCase() + newName.slice(1)} is already added to the phonebook. Replace the old number with a new one?`)) {
       const updatedPersons = persons.map((person) =>
       person.name === newName ? { ...person, number: newNumber } : person
     );
@@ -98,6 +118,7 @@ const App = () => {
         setPersons(updatedPersons);
         setNewName("");
         setNewNumber(""); 
+        setSuccessMessage(`Updated ${userExist.name}'s number successfully`)
       })
     }
    else if (!userExist) {
@@ -108,7 +129,11 @@ const App = () => {
       personService.create(personObject).then((data) => {
         setPersons(persons.concat(data));
         setNewName("");
+        setSuccessMessage(`Added ${data.name}`)
       });
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
     } 
   };
 
@@ -117,12 +142,17 @@ const App = () => {
     if (window.confirm(`Delete ${person.name} ?`)) {
       personService.deleteId(id);
       setPersons(persons.filter((persons) => persons.id !== id));
+      setSuccessMessage(`Deleted ${person.name} successfully`)
     }
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 5000)
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <SuccessNotification message={successMessage}/>
       <Filter filterText={filterText} handleFilterChange={handleFilterChange} />
       <h3>Numbers</h3>
       <Persons

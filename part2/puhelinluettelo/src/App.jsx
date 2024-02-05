@@ -140,19 +140,26 @@ const App = () => {
   const deletePerson = (id) => {
     const person = persons.find((n) => n.id === id);
     if (window.confirm(`Delete ${person.name} ?`)) {
-      personService.deleteId(id);
-      setPersons(persons.filter((persons) => persons.id !== id));
-      setSuccessMessage(`Deleted ${person.name} successfully`)
-    }
+      personService.deleteId(id)
+        .then(() => {
+          setPersons(persons.filter((persons) => persons.id !== id));
+          setSuccessMessage(`Deleted ${person.name} successfully`);
+        })
+        .catch(error => {
+          setErrorMessage(`Information of ${person.name} has already been removed from server`);
+        })
     setTimeout(() => {
       setSuccessMessage(null)
+      setErrorMessage(null)
     }, 5000)
-  };
+  }
+};
 
   return (
     <div>
       <h2>Phonebook</h2>
       <SuccessNotification message={successMessage}/>
+      <ErrorNotication message={errorMessage}/>
       <Filter filterText={filterText} handleFilterChange={handleFilterChange} />
       <h3>Numbers</h3>
       <Persons

@@ -7,6 +7,7 @@ function App() {
   const [countries, setCountries] = useState(null);
   const [filter, setFilter] = useState("");
 
+
   useEffect(() => {
     if (filter) {
       axios
@@ -26,13 +27,14 @@ function App() {
     setFilter(event.target.value);
   };
 
+ 
   return (
     <>
       <form>
         <label>find countries: </label>
         <input value={filter} onChange={handleChange} />
-        <CountryFilter countries={countries} filter={filter} />
       </form>
+      <CountryFilter countries={countries} filter={filter} />
     </>
   );
 }

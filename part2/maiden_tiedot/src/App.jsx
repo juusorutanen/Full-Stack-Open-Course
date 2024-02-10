@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 import CountryFilter from "./components/CountryFilter";
+import CountryWeatherCard from "./components/CountryWeatherCard";
 
 function App() {
   const [countries, setCountries] = useState(null);
   const [filter, setFilter] = useState("");
-
 
   useEffect(() => {
     if (filter) {
@@ -27,7 +27,6 @@ function App() {
     setFilter(event.target.value);
   };
 
- 
   return (
     <>
       <form>
@@ -35,6 +34,7 @@ function App() {
         <input value={filter} onChange={handleChange} />
       </form>
       <CountryFilter countries={countries} filter={filter} />
+      <CountryWeatherCard />
     </>
   );
 }

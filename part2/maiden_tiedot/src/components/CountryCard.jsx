@@ -1,4 +1,7 @@
+import CountryWeatherCard from "./CountryWeatherCard";
+
 const CountryCard = ({ country }) => {
+
   return (
     <div>
       <h2>{country.name.common}</h2>
@@ -11,6 +14,7 @@ const CountryCard = ({ country }) => {
         ))}
       </ul>
       <img src={country.flags.png}></img>
+      <CountryWeatherCard country={country}/>
     </div>
   );
 };
